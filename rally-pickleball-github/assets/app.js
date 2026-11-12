@@ -211,7 +211,44 @@
   function courtModal(id){const r=id?byId(id):{name:'',type:'Court',rate:450,peakRate:550,minRentalHours:1,maxRentalHours:10,openHour:db.settings.openHour,closeHour:db.settings.closeHour,description:'',active:true};if(!r)return;modal(`<form id="court-form" data-id="${esc(id||'')}"><div class="admin-form"><div class="field full"><label>Court name *</label><input name="name" class="input" required maxlength="70" value="${esc(r.name)}" placeholder="Court 04"></div><div class="field"><label>Regular rate per hour (PHP)</label><input class="input" name="rate" type="number" required min="0" max="100000" step="1" value="${r.rate}"></div><div class="field"><label>Peak rate per hour (PHP)</label><input class="input" name="peakRate" type="number" required min="0" max="100000" step="1" value="${r.peakRate}"></div><div class="field full"><span class="small-copy">Peak hours start at ${timeLabel(String(db.settings.peakStartHour).padStart(2,'0')+':00')}, editable in Business Settings.</span></div><div class="field"><label>Bookable from</label><select name="openHour">${hourOptions(r.openHour,0,23)}</select></div><div class="field"><label>Bookable until</label><select name="closeHour">${hourOptions(r.closeHour,1,24)}</select></div><div class="field"><label>Minimum rental hours</label><input class="input" name="minRentalHours" type="number" min="1" max="10" step="1" required value="${r.minRentalHours||1}"></div><div class="field"><label>Maximum rental hours (cap 10)</label><input class="input" name="maxRentalHours" type="number" min="1" max="10" step="1" required value="${r.maxRentalHours||10}"></div><div class="field full"><label>Court description</label><textarea name="description" maxlength="180">${esc(r.description)}</textarea></div><div class="field full"><label>Public availability</label><select name="active"><option value="true" ${r.active?'selected':''}>Active — visible for booking</option><option value="false" ${!r.active?'selected':''}>Archived — hidden from new bookings</option></select></div></div><div class="modal-actions"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button type="submit" class="btn btn-dark">${id?'Save court':'Add court'}</button></div></form>`,id?'Edit court':'Add court')}
   function postModal(id){const p=id?db.posts.find(p=>p.id===id):{title:'',category:'Club News',body:'',date:today(),published:true};if(!p)return;modal(`<form id="post-form" data-id="${esc(id||'')}"><div class="admin-form"><div class="field full"><label>Post title *</label><input class="input" name="title" required maxlength="110" value="${esc(p.title)}" placeholder="Weekend tournament announcement"></div><div class="field"><label>Category</label><select name="category">${['Club News','Promo','Events','Announcement'].map(c=>`<option ${p.category===c?'selected':''}>${c}</option>`).join('')}</select></div><div class="field"><label>Post date</label><input class="input" name="date" type="date" value="${esc(p.date)}" required></div><div class="field full"><label>Announcement details</label><textarea name="body" required maxlength="1200">${esc(p.body)}</textarea></div><div class="field full"><label>Publication status</label><select name="published"><option value="true" ${p.published?'selected':''}>Published — visible on public website</option><option value="false" ${!p.published?'selected':''}>Draft — visible only to admin</option></select></div></div><div class="modal-actions"><button class="btn btn-outline" type="button" data-action="close-modal">Cancel</button><button class="btn btn-dark" type="submit">${id?'Save update':'Publish update'}</button></div></form>`,id?'Edit website update':'Create website update')}
   function bookingModal(id){const b=id?db.bookings.find(x=>x.id===id):{name:'',email:'',phone:'',resourceId:activeResources()[0]?.id||'',date:today(1),time:'09:00',duration:1,status:'Confirmed',amount:0};if(!b)return;modal(`<form id="admin-booking-form" data-id="${esc(id||'')}"><div class="admin-form"><div class="field"><label>Customer name *</label><input class="input" required name="name" maxlength="80" value="${esc(b.name)}"></div><div class="field"><label>Mobile number</label><input class="input" name="phone" maxlength="30" value="${esc(b.phone)}"></div><div class="field full"><label>Email</label><input class="input" type="email" name="email" required maxlength="120" value="${esc(b.email)}"></div><div class="field"><label>Court</label><select name="resourceId">${resourceOptions(b.resourceId)}</select></div><div class="field"><label>Booking date</label><input name="date" class="input" type="date" required min="${today()}" value="${esc(b.date)}"></div><div class="field"><label>Start time</label><select name="time">${timeOptions(b.time)}</select></div><div class="field"><label>Duration</label><select name="duration">${durationOptions(b.duration)}</select></div><div class="field full"><label>Booking status</label><select name="status">${['Pending','Confirmed','Completed','Cancelled'].map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="field full"><label>Payment status (read-only)</label><div class="note">${esc(b.paymentStatus||'No online payment recorded')}<br>In production only verified gateway callbacks can mark online payments as paid.</div></div></div><p class="note">Availability will be checked before saving. Editing a confirmed booking does not process a payment or refund.</p><div class="modal-actions"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button type="submit" class="btn btn-dark">${id?'Save reservation':'Create walk-in booking'}</button></div></form>`,id?'Edit reservation':'Add a walk-in booking',true)}
-  function render(){document.documentElement.style.setProperty('--accent',/^#[0-9a-f]{6}$/i.test(db.settings.accent)?db.settings.accent:'#E85A9A');$('#site-header').innerHTML=header();$('#site-footer').innerHTML=footer();const pages={home,facilities,updates,contact,book:booking,'my-bookings':myBookings,admin};$('#app').innerHTML=(pages[ui.page]||home)();document.title=`${db.settings.name} — ${ui.page==='admin'?'Admin Demo':'Court Booking'}`;}
+  // Progressive, accessibility-conscious animation layer. Does not affect booking/payment state.
+  let previousMotionKey = '';
+  let revealObserver = null;
+  const motionQueries = [
+    '.hero .eyebrow', '.hero h1', '.hero-copy', '.hero-actions', '.hero-badges', '.hero-art',
+    '.ticker', '.section-head', '.facility-card', '.step', '.update-card', '.cta',
+    '.subhero h1', '.subhero p', '.contact-grid .panel',
+    '.booking-stepper', '.wizard-layout > div > .panel', '.booking-layout .summary',
+    '.booking-confirmation', '.wizard-success-icon',
+    '.admin-header', '.display-note', '.stat-card', '.admin-panel', '.item-card'
+  ];
+  function animateContents(){
+    const host=$('#app');
+    const motionKey=ui.page+(ui.page==='admin'?':'+ui.adminTab:ui.page==='book'?':'+ui.bookingStep:'');
+    const shouldEnter=motionKey!==previousMotionKey;
+    previousMotionKey=motionKey;
+    if(revealObserver){revealObserver.disconnect();revealObserver=null;}
+    if(!window.IntersectionObserver || !window.requestAnimationFrame ||
+       (typeof window.matchMedia==='function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)){
+      document.documentElement.classList?.remove?.('motion-enabled');
+      return;
+    }
+    const elements=[...new Set(motionQueries.flatMap(sel=>[...host.querySelectorAll(sel)]))];
+    elements.forEach((element,index)=>{
+      element.classList.add('reveal');
+      element.style.setProperty('--reveal-delay',`${(index%4)*70}ms`);
+      if(!shouldEnter){element.classList.add('is-visible');}
+    });
+    document.documentElement.classList.add('motion-enabled');
+    if(!shouldEnter)return;
+    revealObserver=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver?.unobserve(entry.target);}
+      });
+    },{threshold:0.08,rootMargin:'0px 0px -24px 0px'});
+    elements.forEach(element=>revealObserver.observe(element));
+  }
+  function render(){document.documentElement.style.setProperty('--accent',/^#[0-9a-f]{6}$/i.test(db.settings.accent)?db.settings.accent:'#E85A9A');$('#site-header').innerHTML=header();$('#site-footer').innerHTML=footer();const pages={home,facilities,updates,contact,book:booking,'my-bookings':myBookings,admin};$('#app').innerHTML=(pages[ui.page]||home)();document.title=`${db.settings.name} — ${ui.page==='admin'?'Admin Demo':'Court Booking'}`;animateContents();}
   const nextId=(prefix)=>`${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`;
   function page(p){ui.page=p;ui.menu=false;closeModal();render();window.scrollTo({top:0,behavior:'instant'});}
   document.addEventListener('click',e=>{
