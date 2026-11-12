@@ -4,3 +4,28 @@
 @media(max-width:560px){.nav-wrap{height:69px}.brand-name{font-size:17px}.demo-strip{font-size:10px;flex-wrap:wrap;text-align:center;gap:5px}.hero h1{font-size:42px}.hero-art img{height:260px}.hero-art{margin-top:15px}.hero-badges{gap:16px}.hero-badges span{font-size:10px}.facility-grid,.updates-grid,.steps,.stat-grid,.admin-cards,.admin-form,.fields-2{grid-template-columns:1fr}.admin-form .full,.admin-form .section-label{grid-column:1}.section-head,.footer-inner,.cta{flex-direction:column;align-items:start}.section-head{gap:10px}.slot-grid{grid-template-columns:repeat(3,1fr)}.resources-choose{grid-template-columns:1fr}.panel{padding:19px}.admin-main{padding:27px 15px 55px}.admin-header{flex-wrap:wrap}.admin-header h1{font-size:27px}.stat-card{padding:18px}.modal{padding:19px}.footer-links{gap:12px}.cta h2{font-size:29px}.section-head h2{font-size:32px}}
 
 .fields-2>.full{grid-column:1/-1}
+
+/* Booking-to-payment step flow — presentation demo */
+.booking-stepper{display:flex;gap:8px;margin:0 0 17px;flex-wrap:wrap}
+.wizard-step{min-width:94px;flex:1;display:flex;align-items:center;gap:9px;padding:11px 10px;background:#f0f4ed;border-radius:11px;color:#829689;border:1px solid #e1e9df}
+.wizard-step span{display:grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:#dfe9dc;color:#5c7467;font-size:11px;font-weight:900}
+.wizard-step small{font-weight:800;font-size:11px;line-height:1.25}
+.wizard-step.current{background:#16392e;color:#fff;border-color:#16392e}
+.wizard-step.current span{background:var(--accent);color:#15382a}
+.wizard-step.done{background:#e5f3dd;color:#286b43;border-color:#cde9c8}
+.wizard-step.done span{background:#bce3ad;color:#216e40}
+.slot-legend{margin-top:14px;display:flex;gap:17px;flex-wrap:wrap;color:#718578;font-size:11px}
+.slot-legend span:first-child{color:#348b58}.slot-legend span:nth-child(2){color:#16392d}.slot-legend span:last-child{color:#ac8780}
+.wizard-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:23px}
+.wizard-cta{margin-top:22px;width:100%}
+.wizard-cta:disabled{opacity:.55;cursor:not-allowed}
+.demo-qr-layout{display:grid;grid-template-columns:200px 1fr;align-items:start;gap:26px;border:1px solid #e1e8dd;background:#f9fcf7;border-radius:16px;padding:22px;margin-top:18px}
+.demo-qr{height:195px;width:195px;border:9px solid #fff;border-radius:14px;box-shadow:0 2px 18px #12281b14;background:repeating-linear-gradient(45deg,#e1ebd9 0px,#e1ebd9 8px,#fff 8px,#fff 16px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;color:#123b2c}
+.demo-qr strong{font-size:27px;font-weight:1000;letter-spacing:.02em;background:white;padding:8px 12px;border-radius:7px}.demo-qr small{background:#fff1df;color:#ac3a21;padding:5px 12px;border-radius:5px;font-size:12px;font-weight:900}
+.qr-corners span{position:absolute;width:34px;height:34px;background:#183d30;border:5px solid white;outline:4px solid #183d30;border-radius:2px}.qr-corners span:nth-child(1){top:12px;left:13px}.qr-corners span:nth-child(2){top:12px;right:13px}.qr-corners span:nth-child(3){bottom:12px;left:13px}
+.proof-upload{border:1px dashed #adc0ac;border-radius:12px;padding:20px;background:#fafcf9}.proof-upload label{display:block;margin-bottom:10px}.proof-preview{display:flex;align-items:start;gap:14px;flex-wrap:wrap;margin-top:17px}.proof-preview img{width:min(100%,260px);max-height:360px;object-fit:contain;border:1px solid #d5dfd2;border-radius:12px;background:#f7faf5}.proof-preview span{font-size:12px;color:#62816c}
+.wizard-consent{display:flex;align-items:flex-start;gap:10px;margin-top:18px;color:#516858;font-size:12px;line-height:1.7}.wizard-consent input{margin:4px 0 0;width:17px;height:17px;flex-shrink:0}
+.wizard-success-icon{display:grid;place-items:center;background:#d8f2ca;color:#2d8349;border-radius:50%;height:70px;width:70px;font-size:38px;font-weight:900;margin-bottom:20px}
+.booking-confirmation{margin-top:20px;padding:14px 18px;border-radius:12px;background:#f6faf3}
+@media(max-width:800px){.booking-stepper{gap:6px}.wizard-step{min-width:90px}.demo-qr-layout{grid-template-columns:1fr}.demo-qr{margin:auto}}
+@media(max-width:560px){.booking-stepper{display:grid;grid-template-columns:repeat(3,1fr)}.wizard-step{min-width:0;padding:8px 6px;gap:5px}.wizard-step small{font-size:9px}.wizard-step span{min-width:19px;height:19px}.wizard-actions .btn{flex:1;font-size:12px}.demo-qr-layout{padding:14px}}
