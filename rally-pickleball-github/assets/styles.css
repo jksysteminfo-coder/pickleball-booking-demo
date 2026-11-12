@@ -29,3 +29,6 @@
 .booking-confirmation{margin-top:20px;padding:14px 18px;border-radius:12px;background:#f6faf3}
 @media(max-width:800px){.booking-stepper{gap:6px}.wizard-step{min-width:90px}.demo-qr-layout{grid-template-columns:1fr}.demo-qr{margin:auto}}
 @media(max-width:560px){.booking-stepper{display:grid;grid-template-columns:repeat(3,1fr)}.wizard-step{min-width:0;padding:8px 6px;gap:5px}.wizard-step small{font-size:9px}.wizard-step span{min-width:19px;height:19px}.wizard-actions .btn{flex:1;font-size:12px}.demo-qr-layout{padding:14px}}
+
+/* Hosted checkout demo, no upload proof */
+.gateway-preview{display:flex;align-items:center;gap:18px;background:#f4f8eb;border:1px solid #dfebd2;border-radius:17px;padding:24px;margin:20px 0}.gateway-payment-icon{height:66px;width:66px;display:grid;place-items:center;border-radius:17px;background:#163b30;color:white;font-size:34px}.gateway-methods{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px}.gateway-methods span{display:inline-flex;background:#fff;border:1px solid #dae3d5;padding:9px 13px;border-radius:12px;font-size:12px;font-weight:800}@media(max-width:520px){.gateway-preview{padding:15px}.gateway-payment-icon{width:50px;height:50px;font-size:24px;flex-shrink:0}}
