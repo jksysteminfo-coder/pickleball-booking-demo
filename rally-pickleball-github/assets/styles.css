@@ -32,3 +32,29 @@
 
 /* Hosted checkout demo, no upload proof */
 .gateway-preview{display:flex;align-items:center;gap:18px;background:#f4f8eb;border:1px solid #dfebd2;border-radius:17px;padding:24px;margin:20px 0}.gateway-payment-icon{height:66px;width:66px;display:grid;place-items:center;border-radius:17px;background:#163b30;color:white;font-size:34px}.gateway-methods{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px}.gateway-methods span{display:inline-flex;background:#fff;border:1px solid #dae3d5;padding:9px 13px;border-radius:12px;font-size:12px;font-weight:800}@media(max-width:520px){.gateway-preview{padding:15px}.gateway-payment-icon{width:50px;height:50px;font-size:24px;flex-shrink:0}}
+
+/* Payment-method interaction for the client demo */
+.gateway-method-select{gap:10px}
+.gateway-method-choice{border:1px solid #d4dfd3;background:#fff;color:#213b31;border-radius:12px;padding:12px 14px;font-weight:800;font-size:13px;cursor:pointer;transition:transform .14s ease,border-color .14s ease,background .14s ease}
+.gateway-method-choice:hover{transform:translateY(-1px);border-color:#638c72}
+.gateway-method-choice.selected{background:#1d4838;border-color:#1d4838;color:#fff;box-shadow:0 0 0 3px #ceeea55c}
+.gateway-state{border:1px solid #e0e8d8;background:#f8faf4;border-radius:12px;padding:12px 14px;font-size:13px;color:#42594b}
+.gateway-ready{color:#356d4b}.gateway-failed{color:#b24a37}.gateway-pending{color:#9b751b}
+.gateway-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.gateway-actions .btn{border:1px solid #e1e8de}
+@media(max-width:520px){.gateway-method-select{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.gateway-method-choice{padding:12px 8px;font-size:12px}.gateway-actions{flex-direction:column}}
+
+/* Court-only booking + editable optional add-ons */
+.add-on-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:23px 0 14px}
+.add-on-header h3{margin:0 0 9px}.add-on-header .eyebrow{margin-bottom:12px}
+.addon-list{display:grid;gap:12px}
+.addon-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;align-items:start;background:#fafcf8;border:1px solid #dfebdb;border-radius:14px;padding:17px}
+.addon-option.added{background:#f0f9e9;border-color:#9fc899}
+.addon-info{min-width:0}.addon-info strong{display:block;font-size:16px;margin-bottom:5px}.addon-info .small-copy{display:block;line-height:1.6}
+.addon-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.addon-controls label{font-size:11px;display:flex;flex-direction:column;gap:5px;min-width:95px}.addon-controls select{min-height:38px;padding:7px 9px;font-weight:700}
+.addon-total{grid-column:1/-1;text-align:right;font-size:16px;font-weight:850;color:#173d2c}
+.addon-total .small-copy{font-weight:700}
+.addon-error{grid-column:1/-1;background:#fff4ec;border:1px solid #eec0ab;border-radius:10px;padding:11px 14px;color:#9f3f28;font-size:12px;font-weight:700;margin-top:12px}
+@media(max-width:540px){.addon-option{grid-template-columns:1fr}.addon-controls{justify-content:flex-start}.addon-controls label{flex:1;min-width:110px}.addon-total{text-align:left}}
+/* Four booking steps wrap cleanly on narrow screens */
+@media(max-width:560px){.booking-stepper{grid-template-columns:repeat(2,minmax(0,1fr))}}
