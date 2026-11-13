@@ -406,3 +406,54 @@
 @media(max-width:920px){.rate-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.amenity-grid,.addon-public-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:570px){.rate-grid,.amenity-grid,.addon-public-grid{grid-template-columns:1fr}.rate-tile{padding:16px}.rate-tile strong{font-size:30px}}
 @media(prefers-reduced-motion:reduce){.rate-tile,.addon-public-card,.amenity-tile{transition:none}}
+
+
+/* Serve Point Media Gallery + Admin Library (client presentation) */
+.media-section{background:linear-gradient(180deg,#fff9fc 0%,#f8f5f7 100%)}
+.media-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}
+.media-card{min-width:0;border:1px solid #e9d9e3;border-radius:21px;overflow:hidden;background:#fff;box-shadow:0 10px 35px #4b354314;transition:transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s}
+.media-card:hover{transform:translateY(-7px);box-shadow:0 22px 42px #A7437B2B}
+.media-card-button{border:0;background:transparent;display:block;width:100%;height:100%;padding:0;text-align:left;color:inherit;cursor:pointer}
+.media-card-button:focus-visible{outline:3px solid #E85A9A;outline-offset:-4px}
+.media-thumb{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#F5BCD5,#9B919A 95%);overflow:hidden}
+.media-thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .55s ease}
+.media-card:hover .media-thumb img{transform:scale(1.075)}
+.media-type{position:absolute;top:13px;right:13px;background:#ffffffea;color:#6B5263;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:850;letter-spacing:.03em;box-shadow:0 3px 10px #0001}
+.media-video-tile{height:100%;display:flex;flex-direction:column;gap:9px;align-items:center;justify-content:center;background:radial-gradient(circle at 60% 35%,#EA80B0,#7C737F);color:#fff;font-weight:800;letter-spacing:.1em;font-size:11px}
+.media-play{width:59px;height:59px;border:2px solid #fff9;border-radius:50%;display:grid;place-items:center;font-size:22px;background:#fff3;box-shadow:0 0 0 8px #ffffff18;transition:transform .3s}
+.media-card:hover .media-play{transform:scale(1.13)}
+.media-card-copy{padding:18px 19px 21px}
+.media-category{font-size:10px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#D14A8E}
+.media-card-copy h3{font-size:17px;margin:7px 0 8px;line-height:1.25;color:#403843}
+.media-card-copy p{font-size:12px;color:#837785;line-height:1.5;margin:0 0 9px}
+.media-card-copy small{font-size:11px;color:#b43d7e;font-weight:850}
+.media-placeholder{height:100%;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:#fff;background:linear-gradient(135deg,#e992be,#a29ba3)}
+.media-placeholder span{font-size:40px;line-height:1}
+.media-placeholder small{font-size:11px;color:#fff}
+.media-empty{min-height:220px;border:2px dashed #e6cadb;border-radius:22px;text-align:center;background:linear-gradient(155deg,#fff,#fff4fa);padding:32px 20px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.media-empty>span{width:68px;height:68px;border-radius:20px;display:grid;place-items:center;color:#d34b91;background:#fbe2f0;font-size:40px;margin-bottom:16px}
+.media-empty h3{font-size:20px;margin:0 0 7px}.media-empty p{color:#8a7584;font-size:13px;max-width:500px;margin:0}
+.media-library-note{font-size:12px;color:#8b6c7e;background:#fff3f9;border:1px solid #f0dce7;padding:12px 16px;border-radius:11px;margin-bottom:16px}
+.admin-media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.admin-media-item{min-width:0;border:1px solid #eaddE6;border-radius:18px;overflow:hidden;background:white;display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:12px}
+.admin-media-thumb{width:130px;aspect-ratio:1;overflow:hidden;border-radius:12px;background:#eddbe4}
+.admin-media-thumb img{width:100%;height:100%;object-fit:cover}
+.admin-media-item h3{font-size:16px;margin:8px 0 5px;overflow-wrap:anywhere}
+.admin-media-item p{font-size:12px;color:#7d7480;max-height:60px;overflow:hidden;margin:0 0 7px}
+.admin-media-item small{font-size:10px;color:#877583}
+.admin-media-actions{display:flex;gap:7px;flex-wrap:wrap;grid-column:1/-1;padding-top:8px;border-top:1px solid #f4e7ef}
+.admin-media-actions .btn{flex:1;min-width:70px}
+.media-viewer-frame{min-height:220px;background:#2a232a;border-radius:14px;overflow:hidden;display:grid;place-items:center;max-height:65vh}
+.media-viewer-frame img,.media-viewer-frame video{display:block;width:100%;max-height:65vh;object-fit:contain}
+.media-viewer-frame iframe{width:100%;aspect-ratio:16/9;border:0}
+.media-viewer h3{margin:14px 0 6px}.media-viewer p{color:#716a73;font-size:13px;line-height:1.55}
+.media-file-field[hidden],.media-url-field[hidden]{display:none!important}
+@media(max-width:1150px){.media-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-media-grid{grid-template-columns:1fr}}
+@media(max-width:750px){.media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-media-item{grid-template-columns:105px minmax(0,1fr)}.admin-media-thumb{width:105px}}
+@media(max-width:480px){.media-grid{grid-template-columns:1fr}.media-thumb{aspect-ratio:16/10}.media-card-copy{padding:16px}.admin-media-item{grid-template-columns:92px minmax(0,1fr)}.admin-media-thumb{width:92px}}
+@media(prefers-reduced-motion:reduce){.media-card,.media-thumb img,.media-play{transition:none!important}}
+
+/* Optional real court cover photo selected from the Admin Media Library. */
+.facility-media .court-cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.facility-card:hover .court-cover-photo{transform:scale(1.045)}
+.facility-media .facility-badge{z-index:2}
