@@ -353,3 +353,56 @@
 @media(max-width:380px){.finance-kpi-grid{grid-template-columns:1fr}.finance-kpi strong{font-size:28px}}
 @media(prefers-reduced-motion:reduce){.finance-bar-fill{animation:none}.finance-kpi{transition:none}.finance-kpi:hover{transform:none}.period-choice{transition:none}}
 @media print{@page{size:A4 landscape;margin:12mm}body{background:#fff!important;color:#222!important}#site-header,#site-footer,.admin-sidebar,.admin-header,.display-note,.report-filters,.report-date-row,.btn,.toast{display:none!important}.admin-layout,.admin-main{display:block!important;width:100%!important;padding:0!important;margin:0!important;max-width:none!important}.report-document{display:block}.report-panel,.finance-kpi,.finance-disclaimer{box-shadow:none!important;break-inside:avoid}.finance-chart{overflow:visible}.report-document-title{display:flex}.finance-kpi-grid{grid-template-columns:repeat(4,1fr)}.report-panel,.finance-breakdowns,.finance-kpi-grid{margin-bottom:12px}}
+
+/* V8: Compact TIME label column; COURT columns keep generous space. */
+.court-schedule{table-layout:auto}
+.court-schedule thead th:first-child,
+.court-schedule tbody th{width:92px!important;min-width:92px!important;max-width:92px!important;box-sizing:border-box;}
+.court-schedule thead th:first-child{padding:10px 8px!important;font-size:10px;white-space:nowrap}
+.court-schedule tbody th{padding:8px 9px!important;box-shadow:3px 0 9px #27212B0A}
+.time-slot-value{font-size:11px;letter-spacing:-.015em;white-space:nowrap}
+.court-schedule thead th:not(:first-child){min-width:145px}
+.court-schedule tbody td{min-width:145px}
+@media(max-width:700px){
+  .court-schedule thead th:first-child,.court-schedule tbody th{width:78px!important;min-width:78px!important;max-width:78px!important}
+  .court-schedule thead th:first-child{padding:8px 5px!important;font-size:9px}
+  .court-schedule tbody th{padding:7px 5px!important}
+  .time-slot-value{font-size:10px}
+  .court-schedule thead th:not(:first-child),.court-schedule tbody td{min-width:134px}
+}
+/* Admin CMS and public legal / FAQ pages */
+.cms-section{min-width:0;border:1px solid #eadde5;border-radius:15px;margin:0 0 18px;padding:16px 17px 18px;background:#fffafd}
+.cms-section legend{font-weight:850;font-size:14px;color:#544a55;padding:0 9px}
+.cms-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.cms-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;font-weight:800;color:#635968}
+.cms-field textarea{width:100%;min-height:90px;border:1px solid #dcd3d8;border-radius:10px;padding:12px;font:inherit;font-weight:500;background:#fff;color:#302b35;resize:vertical;line-height:1.55}
+.cms-field input{font-weight:500}
+.cms-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:20px}
+.legal-document{max-width:920px;margin:auto;padding:30px!important;white-space:normal}
+.legal-document p{font-size:15px;line-height:1.85;margin-bottom:20px}
+.faq-list{max-width:950px;margin:0 auto;display:grid;gap:12px}
+.faq-item{border:1px solid #e8dce2;border-radius:14px;background:#fff;padding:18px 22px}
+.faq-item summary{font-weight:800;cursor:pointer}
+.faq-item p{padding-top:13px;line-height:1.65}
+@media(max-width:700px){.cms-fields{grid-template-columns:1fr}.cms-section{padding:12px}.legal-document{padding:18px!important}}
+
+/* Serve Point: official rates, editable amenities and product cards. */
+.rate-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.rate-tile{border-radius:19px;padding:21px;background:white;border:1px solid #ddd8dd;box-shadow:0 10px 34px #24242d0d;transition:transform .22s ease,box-shadow .22s ease}
+.rate-tile:hover,.addon-public-card:hover,.amenity-tile:hover{transform:translateY(-4px);box-shadow:0 15px 40px #b03c6a19}
+.rate-tile>span{display:block;font-size:11px;font-weight:900;letter-spacing:.07em;color:#726776}
+.rate-tile strong{display:block;font-size:clamp(27px,3vw,42px);font-weight:850;margin:8px 0;color:var(--accent,#e85a9a)}
+.rate-tile strong small,.addon-public-card strong small{font-size:14px;color:#6b6b73}
+.rate-tile p{margin:0;color:#6b6b73;font-size:13px}
+.amenity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.amenity-tile{background:#fff;border:1px solid #e9dce3;border-radius:14px;padding:18px 19px;font-weight:700;transition:transform .22s ease,box-shadow .22s ease}
+.addon-public-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.addon-public-card{background:white;border:1px solid #e9dce3;padding:19px;border-radius:16px;transition:transform .22s ease,box-shadow .22s ease}
+.addon-public-card h3{font-size:17px;margin:8px 0;line-height:1.35}
+.addon-public-card strong{font-size:25px;color:#c84080}
+.addon-public-card p{font-size:13px;margin:8px 0 0;color:#65636c}
+.addon-quantity-number{width:100px;min-width:86px}
+.next-day-mark{display:inline;font-size:9px;letter-spacing:0;color:#8f6880;white-space:nowrap}
+@media(max-width:920px){.rate-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.amenity-grid,.addon-public-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){.rate-grid,.amenity-grid,.addon-public-grid{grid-template-columns:1fr}.rate-tile{padding:16px}.rate-tile strong{font-size:30px}}
+@media(prefers-reduced-motion:reduce){.rate-tile,.addon-public-card,.amenity-tile{transition:none}}
