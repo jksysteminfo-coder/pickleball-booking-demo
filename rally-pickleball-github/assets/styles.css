@@ -270,3 +270,47 @@
 @media(max-width:940px){.availability-heading{padding:26px 22px}.availability-toolbar{padding:17px 22px}.availability-legend{padding:15px 22px}.availability-table-wrap{margin:0 22px}.availability-foot{padding:18px 22px 23px}.availability-calendar-mark{display:none}.availability-date-display{margin-left:0}}
 @media(max-width:590px){.availability-shell{border-radius:18px}.availability-topline{padding:10px 15px;gap:8px;letter-spacing:.09em;font-size:9px}.availability-signal{font-size:8px}.availability-heading{padding:24px 18px}.availability-heading h2{font-size:34px}.availability-heading p{font-size:12px}.availability-toolbar{padding:16px;gap:11px}.availability-picker{flex:1;min-width:130px}.availability-date-control{gap:2px}.availability-date-control .input{min-width:0;width:100%;font-size:12px;padding:8px}.availability-date-control .avail-date-nav{width:27px;flex-shrink:0}.availability-picker .input{width:100%;font-size:12px}.availability-today{width:100%;height:38px}.availability-date-display{width:100%;text-align:left}.availability-legend{padding:13px 16px;gap:12px 16px;font-size:10px}.availability-count{margin-left:0;width:100%}.availability-table-wrap{margin:0 12px;border-radius:12px}.court-schedule thead th:first-child,.court-schedule tbody th{min-width:153px;max-width:153px;padding:11px}.court-row-name{font-size:13px}.court-row-detail{font-size:9px}.court-schedule tbody td{min-width:88px}.schedule-cell{min-width:73px}.availability-foot{padding:16px}.availability-disclaimer{max-width:none}.board-callout small{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.availability-spark,.availability-signal i,.court-now.available i,.schedule-cell.occupied .schedule-glyph,.callout-icon,.wizard-success-icon,.booking-stepper .wizard-step.current{animation:none!important}.facility-card:hover,.btn:not(:disabled):hover,.schedule-cell.available:hover{transform:none!important}.availability-table-wrap{scroll-behavior:auto}.schedule-cell,.facility-card,.btn{transition:none!important}}
+
+/* V6: Reference layout — TIME rows × COURT columns. Responsive frozen headings. */
+.operating-summary{display:flex;flex-wrap:wrap;align-items:center;gap:0;border-bottom:1px solid #f2e8ed;background:linear-gradient(90deg,#fff,#fff9fc);padding:0 29px}
+.operating-summary>span{display:flex;gap:10px;align-items:baseline;padding:10px 19px 10px 0;margin-right:22px;white-space:nowrap;border-right:1px solid #f0e6eb}
+.operating-summary>span:last-child{border-right:0}
+.operating-summary b{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#908791}
+.operating-summary strong{font-size:13px;color:#514954}
+.availability-table-wrap{max-height:min(68vh,730px);scrollbar-gutter:stable;scroll-behavior:auto}
+.court-schedule{min-width:100%;width:100%;table-layout:auto}
+.court-schedule thead th{position:sticky;top:0;z-index:3;height:63px;padding:12px 15px;background:#f6f0f4;min-width:180px;text-align:center;letter-spacing:.01em}
+.court-schedule thead th:first-child{position:sticky;top:0;left:0;z-index:6;width:188px;min-width:188px;max-width:188px;text-align:left;background:#494750;padding-left:18px}
+.court-header-name{display:block;font-size:13px;font-weight:950;color:#4b4550;line-height:1.25;letter-spacing:-.025em}
+.court-header-detail{display:block;font-size:10px;font-weight:700;color:#938a95;margin-top:6px}
+.court-schedule tbody th{position:sticky;left:0;z-index:2;max-width:188px;min-width:188px;width:188px;padding:11px 16px;text-align:left;background:#fbf9fa;border-right:1px solid #eee5ea}
+.court-schedule tbody tr:hover th{background:#fceff5}
+.time-slot-value{display:block;font-size:11px;font-weight:850;color:#59525b;white-space:nowrap}
+.court-schedule tbody td{min-width:180px;padding:5px 8px;background:#fff;border-color:#f2e9ee}
+.court-schedule tbody tr:hover td{background:#fffafd}
+.schedule-cell{min-width:0;height:44px;flex-direction:row;gap:9px;border-radius:9px;transition:background .23s ease,border-color .23s ease,box-shadow .23s ease,transform .23s ease}
+.schedule-glyph{font-size:13px}
+.schedule-label{font-size:11px;letter-spacing:.025em}
+.schedule-cell.available{background:#e9f5ee;border-color:#d0e9d9;color:#236649}
+.schedule-cell.available:before{background:linear-gradient(105deg,transparent 20%,#fff8 52%,transparent 80%)}
+.schedule-cell.available:hover,.schedule-cell.available:focus-visible{background:#E85A9A;border-color:#E85A9A;color:#fff;transform:translateY(-2px) scale(1.012);box-shadow:0 7px 15px #d4548e35}
+.schedule-cell.occupied{background:#F8CCDF;border-color:#f0b6ce;color:#963d66}
+.schedule-cell.held{background:#e2e0e5;border-color:#cfcbd3;color:#615c68}
+.schedule-cell.unavailable{background:#f1f0f2;border-color:#e8e6e9;color:#99939c}
+.legend-dot.available{background:#a8d9bc;border-color:#5ca57a}
+.legend-dot.occupied{background:#E85A9A}
+@media(max-width:700px){
+ .operating-summary{padding:5px 15px;gap:2px 14px}
+ .operating-summary>span{margin-right:0;border-right:0;padding:6px 0;gap:5px;flex-direction:column}
+ .operating-summary strong{font-size:12px}
+ .operating-summary b{font-size:9px}
+ .availability-table-wrap{max-height:610px;overscroll-behavior:contain}
+ .court-schedule thead th{min-width:146px;padding:10px 9px}
+ .court-schedule thead th:first-child{min-width:158px;max-width:158px;width:158px;padding-left:13px}
+ .court-schedule tbody th{min-width:158px;max-width:158px;width:158px;padding:10px 11px}
+ .court-schedule tbody td{min-width:146px;padding:5px}
+ .time-slot-value{font-size:10px}
+ .court-header-name{font-size:12px}
+ .schedule-cell{height:44px}
+}
+@media(prefers-reduced-motion:reduce){.schedule-cell{transition:none!important}}
