@@ -457,3 +457,25 @@
 .facility-media .court-cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .facility-card:hover .court-cover-photo{transform:scale(1.045)}
 .facility-media .facility-badge{z-index:2}
+
+/* Reversible removal controls for courts and add-ons */
+.item-card.resource-archived{background:#f8f7f8;border-style:dashed;opacity:.88}
+.item-card.resource-archived .item-head h3{color:#6B6B73}
+.item-actions .manage-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-left:auto}
+.item-actions .manage-actions .btn{min-width:74px}
+@media(max-width:560px){.item-actions{align-items:flex-start;gap:12px;flex-wrap:wrap}.item-actions .manage-actions{width:100%;justify-content:flex-start;margin-left:0}}
+
+
+/* Multiple-court booking controls: all selected courts share one schedule and one checkout. */
+.multi-court-intro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;margin:18px 0 12px;padding:11px 15px;background:#fff2f8;border:1px solid #f4cce0;border-radius:12px;color:#59575f}
+.multi-court-intro strong{color:#bb276d;font-size:14px}
+.multi-court-intro span{font-size:12px}
+.multi-court-choices .resource-option{position:relative;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.multi-court-choices .resource-option:hover{transform:translateY(-3px);box-shadow:0 12px 25px #e85a9a1e}
+.multi-court-choices .court-check{position:absolute;top:9px;right:10px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;border:1px solid #cfc6cb;background:#fff;color:#6b6b73;font-weight:900}
+.multi-court-choices .resource-option.selected .court-check{background:#e85a9a;color:#fff;border-color:#e85a9a}
+.admin-court-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px;background:#f9f7f8;border:1px solid #ece4e9;border-radius:12px;max-height:190px;overflow:auto}
+.admin-court-choice{display:flex;align-items:center;gap:8px;padding:10px;background:#fff;border:1px solid #e7dde3;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.admin-court-choice input{accent-color:#e85a9a;width:17px;height:17px}
+@media(max-width:600px){.admin-court-choices{grid-template-columns:1fr}.multi-court-intro{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.multi-court-choices .resource-option{transition:none}.multi-court-choices .resource-option:hover{transform:none}}
