@@ -121,7 +121,7 @@
       return {settings,resources,addOns,posts:x.posts,bookings:x.bookings.filter(b=>ids.has(b.resourceId))};
     }catch{return fresh}
   }
-  let db=load();const ui={page:'home',adminTab:'overview',menu:false,bookingStep:1,booking:{resourceId:'c1',date:today(1),time:'18:00',duration:1,name:'',email:'',phone:'',players:1,addOns:{}},recentRef:'',bookingFilter:'',customerEmail:'',logoDraft:null,paymentMethod:'gcash',paymentAttempt:'ready'};
+  let db=load();const ui={page:'home',adminTab:'overview',menu:false,availabilityDate:today(),availabilityDuration:1,bookingStep:1,booking:{resourceId:'c1',date:today(1),time:'18:00',duration:1,name:'',email:'',phone:'',players:1,addOns:{}},recentRef:'',bookingFilter:'',customerEmail:'',logoDraft:null,paymentMethod:'gcash',paymentAttempt:'ready'};
   function persist(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch{toast('Demo browser storage is unavailable or full. Changes may not persist.');return false}}
   function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),3200)}
   const byId=id=>db.resources.find(r=>r.id===id);
@@ -132,7 +132,7 @@
   function calcAmount(resourceId,date,time,duration){const r=byId(resourceId);if(!r)return 0;let n=0;for(let i=0;i<duration;i++){const hour=String(Number(time.split(':')[0])+i).padStart(2,'0')+':00';n+=isPeak(date,hour)?Number(r.peakRate):Number(r.rate)}return n}
   function overlap(aStart,aDur,bStart,bDur){const a=Number(aStart.slice(0,2)),b=Number(bStart.slice(0,2));return a<b+bDur&&b<a+aDur}
   function conflict(resourceId,date,time,duration,excludeId){return db.bookings.some(b=>b.id!==excludeId && b.resourceId===resourceId && b.date===date && !['Cancelled'].includes(b.status) && overlap(time,duration,b.time,b.duration))}
-  function slotAvailable(resourceId,date,time,duration,excludeId){const h=Number(time.slice(0,2));const r=byId(resourceId);return !!r?.active && date>=today() && Number.isInteger(duration) && duration>=Math.max(db.settings.minBookingHours,Number(r.minRentalHours)||1) && duration<=Math.min(10,db.settings.maxBookingHours,Number(r.maxRentalHours)||10) && h>=Math.max(db.settings.openHour,r.openHour) && h+duration<=Math.min(db.settings.closeHour,r.closeHour) && !conflict(resourceId,date,time,duration,excludeId)}
+  function slotAvailable(resourceId,date,time,duration,excludeId){const h=Number(time.slice(0,2));const r=byId(resourceId);return !!r?.active && date>=today() && Number.isInteger(duration) && duration>=Math.max(db.settings.minBookingHours,Number(r.minRentalHours)||1) && duration<=Math.min(10,db.settings.maxBookingHours,Number(r.maxRentalHours)||10) && h>=Math.max(db.settings.openHour,r.openHour) && h+duration<=Math.min(db.settings.closeHour,r.closeHour) && !(date===today() && h<=new Date().getHours()) && !conflict(resourceId,date,time,duration,excludeId)}
   function durationOptions(selected=1,resourceId=ui.booking.resourceId){const court=byId(resourceId);const min=Math.max(db.settings.minBookingHours,Number(court?.minRentalHours)||1),max=Math.min(10,db.settings.maxBookingHours,Number(court?.maxRentalHours)||10);return Array.from({length:Math.max(0,max-min+1)},(_,i)=>i+min).map(n=>`<option value="${n}" ${Number(selected)===n?'selected':''}>${n} hour${n>1?'s':''}</option>`).join('')}
   const resourceOptions=(selected)=>db.resources.filter(r=>r.active||r.id===selected).map(r=>`<option value="${esc(r.id)}" ${r.id===selected?'selected':''}>${esc(r.name)}</option>`).join('');
   const timeOptions=(sel)=>Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`).map(t=>`<option value="${t}" ${t===sel?'selected':''}>${timeLabel(t)}</option>`).join('');
@@ -143,9 +143,75 @@
   function footer(){return `<footer class="footer"><div class="container footer-inner"><div><strong>${esc(db.settings.name)}</strong><p>${esc(db.settings.tagline)} · Interactive concept demo</p></div><div class="footer-links"><a href="#" data-page="book">Book a Court</a><a href="#" data-page="my-bookings">My Bookings</a><a href="#" data-page="updates">Updates</a><a href="#" data-page="contact">Contact</a></div></div></footer>`}
   function facilityCard(r,i){const classes=['','alt'];return `<article class="facility-card"><div class="facility-media ${classes[i%2]}"><span class="facility-badge">${esc(r.type.toUpperCase())}</span><div class="mini-court"></div></div><div class="facility-body"><div class="facility-top"><div><h3>${esc(r.name)}</h3><div class="facility-sub">${esc(r.description)}</div></div></div><p class="facility-description">Bookable ${rangeLabel(r.openHour,r.closeHour)} · Add optional equipment at checkout</p><div class="facility-bottom"><div><div class="rate">${peso(r.rate)} <small>/ hour</small></div><span class="availability-dot">Bookable</span></div><button class="btn btn-outline btn-sm" data-action="book-resource" data-id="${esc(r.id)}">Book now ↗</button></div></div></article>`}
   function postCard(p){return `<article class="update-card"><span class="category">${esc(p.category)}</span><h3>${esc(p.title)}</h3><p>${esc(p.body)}</p><time>${dateLabel(p.date)}</time></article>`}
-  function home(){const s=db.settings;const resources=activeResources();const posts=db.posts.filter(x=>x.published).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);return `<div class="site-page"><section class="hero"><div class="container hero-grid"><div><div class="eyebrow">Welcome to your next favorite court</div><h1>${esc(s.heroTitle).replace(/\.(\s|$)/g,'.<br>')}</h1><p class="hero-copy">${esc(s.heroText)}</p><div class="hero-actions"><button class="btn btn-lime" data-page="book">Reserve your court ↗</button><button class="btn btn-white" data-page="facilities">Explore our courts</button></div><div class="hero-badges"><span><b>✓</b> Easy online booking</span><span><b>✓</b> Flexible time slots</span><span><b>✓</b> All skill levels</span></div></div><div class="hero-art"><img src="assets/court-art.svg" alt="Stylized pickleball court, ball and paddle illustration"><div class="art-sticker"><span><strong>PLAY</strong>MORE.<br>WORRY LESS.</span></div></div></div></section><div class="ticker"><div class="container ticker-inner"><strong>CLUB UPDATE</strong><p>${esc(s.announcement)}</p><button class="btn btn-ghost btn-sm" data-page="updates">What's new ↗</button></div></div><section class="section"><div class="container"><div class="section-head"><div><div class="eyebrow">Find your spot</div><h2>A court for every<br>kind of game.</h2><p>Choose a court, pick a time and get ready to play.</p></div><button class="btn btn-outline" data-page="facilities">See all facilities ↗</button></div><div class="facility-grid">${resources.slice(0,3).map(facilityCard).join('') || '<p>No facilities published yet.</p>'}</div></div></section><section class="section section-alt"><div class="container"><div class="section-head"><div><div class="eyebrow">Simple by design</div><h2>Three steps to game time.</h2></div></div><div class="steps"><div class="step"><div class="step-num">01</div><h3>Choose your court</h3><p>Find your preferred court and see its hourly rate.</p></div><div class="step"><div class="step-num">02</div><h3>Pick a time</h3><p>Check demo availability and select the time that fits your group.</p></div><div class="step"><div class="step-num">03</div><h3>Send your booking</h3><p>Complete a demo checkout. The production site confirms only after the gateway reports paid.</p></div></div></div></section><section class="section"><div class="container"><div class="section-head"><div><div class="eyebrow">Around the club</div><h2>News, events & good vibes.</h2></div><button class="btn btn-outline" data-page="updates">All updates ↗</button></div><div class="updates-grid">${posts.length?posts.map(postCard).join(''):'<p>No published updates yet.</p>'}</div></div></section><section class="section" style="padding-top:0"><div class="container"><div class="cta"><div><h2>Ready to start a rally?</h2><p>Your next favorite game is only a few clicks away.</p></div><button class="btn btn-lime" data-page="book">Book your spot ↗</button></div></div></section></div>`}
+  function home(){const s=db.settings;const resources=activeResources();const posts=db.posts.filter(x=>x.published).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);return `<div class="site-page"><section class="hero"><div class="container hero-grid"><div><div class="eyebrow">Welcome to your next favorite court</div><h1>${esc(s.heroTitle).replace(/\.(\s|$)/g,'.<br>')}</h1><p class="hero-copy">${esc(s.heroText)}</p><div class="hero-actions"><button class="btn btn-lime" data-page="book">Reserve your court ↗</button><button class="btn btn-white" data-page="facilities">Explore our courts</button></div><div class="hero-badges"><span><b>✓</b> Easy online booking</span><span><b>✓</b> Flexible time slots</span><span><b>✓</b> All skill levels</span></div></div><div class="hero-art"><img src="assets/court-art.svg" alt="Stylized pickleball court, ball and paddle illustration"><div class="art-sticker"><span><strong>PLAY</strong>MORE.<br>WORRY LESS.</span></div></div></div></section><div class="ticker"><div class="container ticker-inner"><strong>CLUB UPDATE</strong><p>${esc(s.announcement)}</p><button class="btn btn-ghost btn-sm" data-page="updates">What's new ↗</button></div></div>${availabilitySection()}<section class="section"><div class="container"><div class="section-head"><div><div class="eyebrow">Find your spot</div><h2>A court for every<br>kind of game.</h2><p>Choose a court, pick a time and get ready to play.</p></div><button class="btn btn-outline" data-page="facilities">See all facilities ↗</button></div><div class="facility-grid">${resources.slice(0,3).map(facilityCard).join('') || '<p>No facilities published yet.</p>'}</div></div></section><section class="section section-alt"><div class="container"><div class="section-head"><div><div class="eyebrow">Simple by design</div><h2>Three steps to game time.</h2></div></div><div class="steps"><div class="step"><div class="step-num">01</div><h3>Choose your court</h3><p>Find your preferred court and see its hourly rate.</p></div><div class="step"><div class="step-num">02</div><h3>Pick a time</h3><p>Check demo availability and select the time that fits your group.</p></div><div class="step"><div class="step-num">03</div><h3>Send your booking</h3><p>Complete a demo checkout. The production site confirms only after the gateway reports paid.</p></div></div></div></section><section class="section"><div class="container"><div class="section-head"><div><div class="eyebrow">Around the club</div><h2>News, events & good vibes.</h2></div><button class="btn btn-outline" data-page="updates">All updates ↗</button></div><div class="updates-grid">${posts.length?posts.map(postCard).join(''):'<p>No published updates yet.</p>'}</div></div></section><section class="section" style="padding-top:0"><div class="container"><div class="cta"><div><h2>Ready to start a rally?</h2><p>Your next favorite game is only a few clicks away.</p></div><button class="btn btn-lime" data-page="book">Book your spot ↗</button></div></div></section></div>`}
+  // Demo court occupancy board: this is a view of browser-local bookings, not shared real-time inventory.
+  // In production the backend must return authoritative slots, holds and paid booking statuses.
+  const availabilityTime = h => `${String(h).padStart(2,'0')}:00`;
+  function boardStatus(court,date,hour,duration){
+    if(!court.active || !Number.isInteger(hour)) return {key:'unavailable',label:'Unavailable',reason:'Court is not bookable'};
+    const start=availabilityTime(hour);
+    const booking=db.bookings.find(b=>b.resourceId===court.id && b.date===date && b.status!=='Cancelled' && overlap(start,duration,b.time,Number(b.duration)));
+    if(booking){
+      const confirmed=['Confirmed','Completed'].includes(booking.status);
+      return confirmed ? {key:'occupied',label:'Occupied',reason:`Existing ${booking.status.toLowerCase()} reservation`} :
+        {key:'held',label:'On hold',reason:'Pending reservation blocks this slot'};
+    }
+    const min=Math.max(db.settings.minBookingHours,Number(court.minRentalHours)||1);
+    const max=Math.min(10,db.settings.maxBookingHours,Number(court.maxRentalHours)||10);
+    const now=new Date();
+    if(date<today() || (date===today() && hour<=now.getHours())) return {key:'unavailable',label:'Unavailable',reason:'This start time has passed'};
+    if(hour<Math.max(court.openHour,db.settings.openHour) || hour+duration>Math.min(court.closeHour,db.settings.closeHour))return {key:'unavailable',label:'Unavailable',reason:'Outside court operating hours'};
+    if(duration<min || duration>max) return {key:'unavailable',label:'Unavailable',reason:`Court accepts ${min}–${max} hour reservations`};
+    return {key:'available',label:'Available',reason:'Select this time to start your booking'};
+  }
+  function courtNowStatus(court){
+    if(!court.active)return {key:'unavailable',label:'Offline'};
+    const now=new Date(); const h=now.getHours(),d=today();
+    if(h<Math.max(court.openHour,db.settings.openHour) || h>=Math.min(court.closeHour,db.settings.closeHour))return {key:'unavailable',label:'Closed now'};
+    if(db.bookings.some(b=>b.resourceId===court.id&&b.date===d&&['Confirmed','Completed'].includes(b.status)&&h>=Number(b.time.slice(0,2))&&h<Number(b.time.slice(0,2))+Number(b.duration)))return {key:'occupied',label:'In use now'};
+    if(db.bookings.some(b=>b.resourceId===court.id&&b.date===d&&b.status==='Pending'&&h>=Number(b.time.slice(0,2))&&h<Number(b.time.slice(0,2))+Number(b.duration)))return {key:'held',label:'Reserved now'};
+    return {key:'available',label:'Free now'};
+  }
+  function availabilitySection(){
+    const date=ui.availabilityDate>=today()?ui.availabilityDate:today();
+    ui.availabilityDate=date;
+    const duration=Math.max(1,Math.min(10,Number(ui.availabilityDuration)||1));
+    ui.availabilityDuration=duration;
+    const courts=db.resources;
+    const hours=Array.from({length:Math.max(0,db.settings.closeHour-db.settings.openHour)},(_,i)=>db.settings.openHour+i);
+    const counts={available:0,occupied:0,held:0,unavailable:0};
+    const rows=courts.map((court,index)=>{
+      const now=courtNowStatus(court);
+      const cells=hours.map(hour=>{
+        const status=boardStatus(court,date,hour,duration);counts[status.key]++;
+        const tooltip=`${court.name} · ${dateLabel(date)} · ${timeLabel(availabilityTime(hour))} · ${duration}h — ${status.label}. ${status.reason}`;
+        return `<td><button type="button" class="schedule-cell ${status.key}" ${status.key==='available'?`data-action="availability-book" data-id="${esc(court.id)}" data-time="${availabilityTime(hour)}"`:'disabled'} aria-label="${esc(tooltip)}" title="${esc(tooltip)}"><span class="schedule-glyph" aria-hidden="true">${status.key==='available'?'↗':status.key==='occupied'?'●':status.key==='held'?'◷':'–'}</span><span class="schedule-label">${status.label}</span></button></td>`;
+      }).join('');
+      return `<tr class="court-row" style="--row-index:${index}"><th scope="row"><div class="court-row-name">${esc(court.name)}</div><div class="court-row-detail">${peso(court.rate)} / hr · ${rangeLabel(court.openHour,court.closeHour)}</div><div class="court-now ${now.key}"><i aria-hidden="true"></i>${now.label}</div></th>${cells}</tr>`;
+    }).join('');
+    const prevDisabled=date<=today();
+    return `<section class="availability-section section" id="availability"><div class="container"><div class="availability-shell"><div class="availability-topline"><span class="availability-spark">✦</span><span>COURT AVAILABILITY BOARD</span><span class="availability-signal"><i></i> INTERACTIVE DEMO</span></div><div class="availability-heading"><div><div class="eyebrow">Your court. Your time.</div><h2>See the schedule.<br><em>Claim your court.</em></h2><p>Select a date and duration. Every court is listed below so you can instantly see booked, held and available times.</p></div><div class="availability-calendar-mark" aria-hidden="true"><span>COURT</span><b>01<span> / </span>03</b><i>BOOK YOUR MOMENT</i></div></div><div class="availability-toolbar"><div class="availability-picker"><label for="availability-date">SELECT DATE</label><div class="availability-date-control"><button type="button" class="avail-date-nav" data-action="availability-prev" aria-label="Previous day" ${prevDisabled?'disabled':''}>‹</button><input class="input" type="date" id="availability-date" data-availability-date value="${esc(date)}" min="${today()}"><button type="button" class="avail-date-nav" data-action="availability-next" aria-label="Next day">›</button></div></div><div class="availability-picker"><label for="availability-duration">RENTAL DURATION</label><select class="input" id="availability-duration" data-availability-duration>${Array.from({length:10},(_,i)=>i+1).map(h=>`<option value="${h}" ${h===duration?'selected':''}>${h} hour${h>1?'s':''}</option>`).join('')}</select></div><button type="button" class="btn availability-today" data-action="availability-today">Today ↗</button><div class="availability-date-display"><strong>${dateLabel(date)}</strong><span>Swipe to view more hours →</span></div></div><div class="availability-legend" aria-label="Slot statuses"><span><i class="legend-dot available"></i> Available</span><span><i class="legend-dot occupied"></i> Occupied</span><span><i class="legend-dot held"></i> On hold</span><span><i class="legend-dot unavailable"></i> Unavailable</span><span class="availability-count"><b>${counts.available}</b> available starts</span></div><div class="availability-table-wrap" tabindex="0" role="region" aria-label="Court status by hourly start time; scroll horizontally for more times"><table class="court-schedule"><thead><tr><th scope="col"><span class="table-head-icon">◉</span> COURTS / START TIMES</th>${hours.map(h=>`<th scope="col"><small>START</small>${timeLabel(availabilityTime(h))}</th>`).join('')}</tr></thead><tbody>${rows||'<tr><td colspan="99" class="empty">No courts have been added yet. Add a court in Admin Demo.</td></tr>'}</tbody></table></div><div class="availability-foot"><div class="board-callout"><span class="callout-icon">↗</span><span><b>Tap any Available slot</b><small>We'll carry your chosen court, date and duration into the booking form.</small></span></div><span class="availability-disclaimer">Sample schedules live only in this browser. Real-time multi-user syncing requires the production database.</span></div></div></div></section>`;
+  }
+  function centerAvailabilityOnUsefulHours(){
+    const scroller=document.querySelector('#availability .availability-table-wrap');
+    if(!scroller)return;
+    const firstHour=db.settings.openHour;
+    const next=ui.availabilityDate===today()?Math.max(firstHour,new Date().getHours()+1):firstHour;
+    const cols=Math.max(0,next-firstHour-1);
+    scroller.scrollLeft=cols*93;
+  }
+  function refreshAvailability(resetScroll=false){
+    const host=document.getElementById('availability');
+    if(!host)return;
+    const scroll=host.querySelector('.availability-table-wrap')?.scrollLeft||0;
+    const temp=document.createElement('div');temp.innerHTML=availabilitySection();
+    host.replaceWith(temp.firstElementChild);
+    const replacement=document.getElementById('availability');
+    const scroller=replacement?.querySelector('.availability-table-wrap');if(scroller)scroller.scrollLeft=scroll;
+    if(resetScroll)centerAvailabilityOnUsefulHours();
+  }
   function subhero(label,title,desc){return `<section class="subhero"><div class="container"><div class="eyebrow">${esc(label)}</div><h1>${esc(title)}</h1><p>${esc(desc)}</p></div></section>`}
-  function facilities(){return `<div class="site-page">${subhero('Facilities & Rates','Spaces worth playing for.','Browse the courts and see their hourly prices and schedules, editable in the admin dashboard.')}<section class="section"><div class="container"><div class="facility-grid">${activeResources().map(facilityCard).join('')||'<p>No available courts yet.</p>'}</div><p class="note">Off-peak rates are shown. Evening peak-hour prices may be higher. All pricing is sample content for this demo.</p></div></section></div>`}
+  function facilities(){return `<div class="site-page">${subhero('Facilities & Rates','Spaces worth playing for.','Browse the courts and see their hourly prices and schedules, editable in the admin dashboard.')}${availabilitySection()}<section class="section"><div class="container"><div class="facility-grid">${activeResources().map(facilityCard).join('')||'<p>No available courts yet.</p>'}</div><p class="note">Off-peak rates are shown. Evening peak-hour prices may be higher. All pricing is sample content for this demo.</p></div></section></div>`}
   function updates(){const posts=db.posts.filter(p=>p.published).sort((a,b)=>b.date.localeCompare(a.date));return `<div class="site-page">${subhero('Latest from the club','Club news & updates.','Promotions, announcements, and events — all editable in the Admin Dashboard.')}<section class="section"><div class="container"><div class="updates-grid">${posts.map(postCard).join('')||'<div class="empty">No published news yet.</div>'}</div></div></section></div>`}
   function contact(){const s=db.settings;return `<div class="site-page">${subhero('Get in touch','See you on court.','Have a question about a booking, group session or event? Reach out to the team.')}<section class="section"><div class="container contact-grid"><div class="panel"><h3>Club information</h3><p class="panel-caption">These details are editable under Admin → Business Settings.</p><div class="feature-row"><b>Location:</b> ${esc(s.address)}</div><div class="feature-row"><b>Phone:</b> ${esc(s.phone)}</div><div class="feature-row"><b>Email:</b> ${esc(s.email)}</div><div class="feature-row"><b>Hours:</b> ${esc(s.hours)}</div><div class="soft-divider"></div><button class="btn btn-dark" data-page="book">Book a court ↗</button></div><div class="contact-illustration"><div><div class="bigicon">🏓</div><h2>Let's play!</h2><p>Good games begin with good company.</p></div></div></div></section></div>`}
   function booking(){
@@ -216,7 +282,7 @@
   let revealObserver = null;
   const motionQueries = [
     '.hero .eyebrow', '.hero h1', '.hero-copy', '.hero-actions', '.hero-badges', '.hero-art',
-    '.ticker', '.section-head', '.facility-card', '.step', '.update-card', '.cta',
+    '.ticker', '.availability-shell', '.availability-heading', '.availability-toolbar', '.availability-table-wrap', '.availability-foot', '.section-head', '.facility-card', '.step', '.update-card', '.cta',
     '.subhero h1', '.subhero p', '.contact-grid .panel',
     '.booking-stepper', '.wizard-layout > div > .panel', '.booking-layout .summary',
     '.booking-confirmation', '.wizard-success-icon',
@@ -248,13 +314,24 @@
     },{threshold:0.08,rootMargin:'0px 0px -24px 0px'});
     elements.forEach(element=>revealObserver.observe(element));
   }
-  function render(){document.documentElement.style.setProperty('--accent',/^#[0-9a-f]{6}$/i.test(db.settings.accent)?db.settings.accent:'#E85A9A');$('#site-header').innerHTML=header();$('#site-footer').innerHTML=footer();const pages={home,facilities,updates,contact,book:booking,'my-bookings':myBookings,admin};$('#app').innerHTML=(pages[ui.page]||home)();document.title=`${db.settings.name} — ${ui.page==='admin'?'Admin Demo':'Court Booking'}`;animateContents();}
+  function render(){document.documentElement.style.setProperty('--accent',/^#[0-9a-f]{6}$/i.test(db.settings.accent)?db.settings.accent:'#E85A9A');$('#site-header').innerHTML=header();$('#site-footer').innerHTML=footer();const pages={home,facilities,updates,contact,book:booking,'my-bookings':myBookings,admin};$('#app').innerHTML=(pages[ui.page]||home)();document.title=`${db.settings.name} — ${ui.page==='admin'?'Admin Demo':'Court Booking'}`;animateContents();centerAvailabilityOnUsefulHours();}
   const nextId=(prefix)=>`${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`;
   function page(p){ui.page=p;ui.menu=false;closeModal();render();window.scrollTo({top:0,behavior:'instant'});}
   document.addEventListener('click',e=>{
     const p=e.target.closest('[data-page]');if(p){e.preventDefault();page(p.dataset.page);return}
     const tab=e.target.closest('[data-admin-tab]');if(tab){ui.adminTab=tab.dataset.adminTab;render();return}
     const a=e.target.closest('[data-action]');if(!a)return;const action=a.dataset.action,id=a.dataset.id;
+    if(action==='availability-book'){
+      const time=a.dataset.time, court=byId(id),duration=ui.availabilityDuration;
+      if(!court || boardStatus(court,ui.availabilityDate,Number(time?.slice(0,2)),duration).key!=='available'){toast('That slot is no longer available in this demo.');refreshAvailability();return}
+      ui.booking={...ui.booking,resourceId:id,date:ui.availabilityDate,time,duration,addOns:{}};
+      ui.bookingStep=1;ui.paymentAttempt='ready';page('book');return;
+    }
+    if(action==='availability-prev'||action==='availability-next'||action==='availability-today'){
+      if(action==='availability-today')ui.availabilityDate=today();
+      else{const d=new Date(ui.availabilityDate+'T12:00:00');d.setDate(d.getDate()+(action==='availability-next'?1:-1));const next=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;ui.availabilityDate=next>=today()?next:today();}
+      refreshAvailability(true);return;
+    }
     if(action==='booking-back'){ui.bookingStep=Math.max(1,ui.bookingStep-1);render();return}
     if(action==='booking-next'){const b=ui.booking;if(ui.bookingStep===1&&(!slotAvailable(b.resourceId,b.date,b.time,Number(b.duration))||!addonsValid(b))){toast('Choose an available court, time and add-ons.');return}ui.bookingStep=Math.min(3,ui.bookingStep+1);render();return}
     if(action==='booking-new'){ui.bookingStep=1;ui.recentRef='';ui.booking.time='';ui.booking.addOns={};ui.paymentAttempt='ready';render();return}
@@ -285,6 +362,8 @@
   });
   document.addEventListener('change',e=>{
     const t=e.target;
+    if(t.matches('[data-availability-date]')){ui.availabilityDate=t.value>=today()?t.value:today();refreshAvailability(true);return}
+    if(t.matches('[data-availability-duration]')){ui.availabilityDuration=Math.max(1,Math.min(10,Number(t.value)||1));refreshAvailability();return}
     if(t.matches('[data-addon-field]')){const id=t.dataset.addonId;const current=addonSelection(id);ui.booking.addOns[id]={...current,[t.dataset.addonField]:Number(t.value)};const a=addonById(id);if(a?.unit==='hour'&&Number(ui.booking.addOns[id].qty)>0){const lim=addonHourLimits(a,ui.booking.duration);ui.booking.addOns[id].hours=Math.max(lim.min,Math.min(Number(ui.booking.addOns[id].hours)||lim.min,lim.max));}render();return}
     if(t.matches('[data-booking-field]')){ui.booking[t.dataset.bookingField]=t.value;if(['date','duration'].includes(t.dataset.bookingField)){if(t.dataset.bookingField==='duration')for(const a of db.addOns){const ch=ui.booking.addOns[a.id];if(ch&&a.unit==='hour'){const lim=addonHourLimits(a,ui.booking.duration);ch.hours=Math.max(lim.min,Math.min(Number(ch.hours)||lim.min,lim.max));}}if(!slotAvailable(ui.booking.resourceId,ui.booking.date,ui.booking.time,Number(ui.booking.duration)))ui.booking.time='';render()}}
     

@@ -172,3 +172,101 @@
   .motion-enabled .reveal, .motion-enabled .reveal.is-visible {opacity:1!important;transform:none!important;transition:none!important;}
   *, *::before, *::after {animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}
 }
+
+/* COURT AVAILABILITY BOARD — court-pink × graphite experience */
+.availability-section{position:relative;isolation:isolate;background:linear-gradient(145deg,#fff 2%,#F9F2F6 55%,#F1EDF1 100%);overflow:hidden}
+.availability-section:before{content:"";pointer-events:none;position:absolute;width:600px;height:600px;right:-250px;top:-280px;border-radius:50%;background:radial-gradient(circle,#E85A9A1c 0,transparent 69%);filter:blur(2px)}
+.availability-section:after{content:"";position:absolute;left:-200px;bottom:-320px;width:650px;height:650px;border:1px solid #E85A9A13;border-radius:50%;pointer-events:none}
+.availability-shell{position:relative;background:#fff;border:1px solid #E6DDE3;border-radius:28px;box-shadow:0 30px 85px #6B6B7313,0 5px 14px #6B6B730d;overflow:hidden}
+.availability-topline{min-height:48px;display:flex;align-items:center;gap:13px;padding:12px 28px;background:#35363F;color:#FAF6F9;font-size:10px;letter-spacing:.17em;font-weight:900}
+.availability-spark{display:grid;place-items:center;color:#F4A6CC;font-size:22px;animation:availability-star 7s ease-in-out infinite}
+.availability-signal{display:flex;align-items:center;gap:9px;margin-left:auto;color:#F5CDDE;white-space:nowrap;font-weight:800;letter-spacing:.10em}
+.availability-signal i{width:7px;height:7px;border-radius:100%;background:#E85A9A;box-shadow:0 0 0 4px #E85A9A30;animation:availability-pulse 2.4s ease-in-out infinite}
+.availability-heading{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:32px 30px 24px;background:radial-gradient(ellipse at right,#FFF3F8,#fff 65%)}
+.availability-heading h2{margin:8px 0 12px;font-size:clamp(33px,4vw,55px);line-height:1.06;letter-spacing:-.055em}
+.availability-heading h2 em{color:#D64B8C;font-style:normal}
+.availability-heading p{max-width:540px;color:#797781;font-size:14px;line-height:1.75;margin:0}
+.availability-calendar-mark{position:relative;flex:0 0 178px;height:122px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:1px solid #E85A9A75;border-radius:19px;transform:rotate(3deg);background:linear-gradient(135deg,#FDE6F0,#FFF7FA);box-shadow:9px 10px 0 #E85A9A14;overflow:hidden}
+.availability-calendar-mark:before,.availability-calendar-mark:after{content:"";position:absolute;inset:11px;border:1px solid #E85A9A42;border-radius:10px}
+.availability-calendar-mark:after{inset:0 auto 0 50%;border-left:1px solid #E85A9A42;border-top:0;border-right:0;border-bottom:0;border-radius:0}
+.availability-calendar-mark span{font-size:11px;font-weight:900;letter-spacing:.24em;color:#D64B8C;z-index:1}
+.availability-calendar-mark b{font-size:40px;font-weight:950;color:#46434C;line-height:1.1;letter-spacing:-.07em;z-index:1}
+.availability-calendar-mark b span{font-size:18px;letter-spacing:0}
+.availability-calendar-mark i{color:#967E8C;font-size:8px;font-style:normal;letter-spacing:.12em;font-weight:900;z-index:1}
+.availability-toolbar{padding:19px 28px;background:#FCF8FB;border-top:1px solid #F1E5EB;border-bottom:1px solid #F1E5EB;display:flex;align-items:end;gap:12px;flex-wrap:wrap}
+.availability-picker{display:flex;flex-direction:column;gap:7px}
+.availability-picker label{font-size:10px;font-weight:950;color:#87808A;letter-spacing:.12em}
+.availability-picker .input{height:45px;min-width:145px;border-color:#E1D8DF;background:#fff;border-radius:11px;font-weight:800;color:#4B4B54}
+.availability-date-control{display:flex;align-items:center;gap:4px}
+.availability-date-control .input{min-width:170px}
+.avail-date-nav{height:45px;width:36px;display:grid;place-items:center;border:1px solid #E1D8DF;background:#fff;color:#6B6B73;border-radius:10px;font-size:24px;font-weight:700;transition:transform .18s ease,background .18s ease,border-color .18s ease}
+.avail-date-nav:hover:not(:disabled){background:#FFE5F1;border-color:#E85A9A;transform:translateY(-2px)}
+.avail-date-nav:disabled{opacity:.34;cursor:not-allowed}
+.availability-today{height:45px;background:#505059;color:#fff;border-radius:11px;padding:0 18px;font-size:12px}
+.availability-date-display{margin-left:auto;text-align:right;display:grid;gap:3px;align-self:center}
+.availability-date-display strong{font-size:16px;font-weight:900;letter-spacing:-.025em;color:#45414B}
+.availability-date-display span{font-size:10px;color:#8D8690;letter-spacing:.04em}
+.availability-legend{padding:16px 29px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;color:#66636A;font-size:12px;font-weight:800}
+.availability-legend>span:not(.availability-count){display:flex;align-items:center;gap:8px}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid transparent}
+.legend-dot.available{background:#fff;border-color:#D65A91;box-shadow:0 0 0 2px #FFE7F1}
+.legend-dot.occupied{background:#E85A9A}
+.legend-dot.held{background:#777680}
+.legend-dot.unavailable{background:#D4D3D6}
+.availability-count{margin-left:auto;font-size:11px;color:#7B7680}.availability-count b{color:#D54D88;font-size:16px}
+.availability-table-wrap{margin:0 28px 0;border:1px solid #ECE3E9;border-radius:17px;overflow:auto;position:relative;background:#fff;scrollbar-color:#D2A5BC #F8F5F7;scrollbar-width:thin;overscroll-behavior-x:contain;scroll-behavior:smooth;box-shadow:inset 0 2px 8px #4A415208}
+.availability-table-wrap::-webkit-scrollbar{height:10px}.availability-table-wrap::-webkit-scrollbar-track{background:#F8F5F7;border-radius:99px}.availability-table-wrap::-webkit-scrollbar-thumb{background:#C5A5B6;border-radius:99px;border:2px solid #F8F5F7}
+.court-schedule{border-spacing:0;border-collapse:separate;min-width:max-content;width:100%}
+.court-schedule thead th{height:65px;padding:12px 9px;background:#F5F1F4;color:#5C5961;font-size:11px;font-weight:900;text-align:center;border-bottom:1px solid #EAE3E9;border-right:1px solid #EFEAF0;white-space:nowrap}
+.court-schedule thead th small{display:block;font-size:9px;letter-spacing:.16em;color:#AF9FAC;margin-bottom:4px}
+.court-schedule thead th:first-child{z-index:4;position:sticky;left:0;text-align:left;padding-left:20px;min-width:214px;background:#44444D;color:#fff;letter-spacing:.085em;font-size:10px}
+.table-head-icon{font-size:15px;color:#FA91BE;margin-right:7px}
+.court-schedule tbody tr{--row-index:0;transition:background .25s ease}
+.court-schedule tbody tr:hover{background:#FFFAFD}
+.court-schedule tbody th{z-index:2;position:sticky;left:0;background:#fff;text-align:left;padding:16px 17px;min-width:214px;max-width:214px;border-bottom:1px solid #F0EAF0;border-right:1px solid #F0EAF0;box-shadow:7px 0 18px #27212B0A}
+.court-schedule tbody tr:hover th{background:#FEF5FA}
+.court-row-name{font-size:16px;font-weight:950;color:#45414B;line-height:1.25;letter-spacing:-.025em}
+.court-row-detail{font-size:10px;color:#8B8790;line-height:1.5;margin-top:5px;font-weight:600}
+.court-now{display:inline-flex;align-items:center;gap:6px;margin-top:9px;border-radius:100px;padding:4px 9px;font-weight:850;font-size:10px;background:#F1F1F3;color:#767580}
+.court-now i{height:6px;width:6px;border-radius:50%;background:currentColor}
+.court-now.available{background:#FDE7F0;color:#C64A85}.court-now.available i{animation:availability-pulse 2.5s ease infinite}
+.court-now.occupied{background:#E85A9A;color:#fff}.court-now.held{background:#E5E3E7;color:#5E5B64}
+.court-schedule tbody td{border-bottom:1px solid #F0EAF0;border-right:1px solid #F5F0F5;padding:8px 5px;min-width:92px;text-align:center}
+.court-schedule tbody tr:last-child td,.court-schedule tbody tr:last-child th{border-bottom:0}
+.schedule-cell{position:relative;min-width:78px;width:100%;height:62px;padding:7px 5px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;border-radius:10px;border:1px solid transparent;cursor:pointer;overflow:hidden;transition:transform .24s cubic-bezier(.2,.85,.25,1.2),box-shadow .24s ease,background .2s ease,border-color .2s ease}
+.schedule-glyph{font-size:18px;line-height:1;font-weight:900;transition:transform .24s ease}
+.schedule-label{font-size:10px;font-weight:900;line-height:1.1;white-space:nowrap}
+.schedule-cell.available{background:#FFF0F7;color:#C74883;border-color:#F4D3E3}
+.schedule-cell.available:before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 10%,#fff9 48%,transparent 74%);transform:translateX(-130%);transition:transform .46s ease}
+.schedule-cell.available:hover,.schedule-cell.available:focus-visible{background:#E85A9A;color:#fff;border-color:#E85A9A;transform:translateY(-4px) scale(1.04);box-shadow:0 10px 22px #D4548E40;z-index:1}
+.schedule-cell.available:hover:before,.schedule-cell.available:focus-visible:before{transform:translateX(130%)}
+.schedule-cell.available:hover .schedule-glyph{transform:translate(2px,-2px) rotate(-6deg)}
+.schedule-cell.occupied{background:#E85A9A;color:white;border-color:#E85A9A;cursor:default}
+.schedule-cell.occupied .schedule-glyph{animation:occupied-glow 3.4s ease-in-out infinite}
+.schedule-cell.held{background:#74737D;color:#fff;border-color:#74737D;cursor:default}
+.schedule-cell.unavailable{background:#F2F1F2;color:#B4B0B5;border-color:#EEEBEF;cursor:default}
+.schedule-cell:disabled{opacity:1}
+.schedule-cell:focus-visible,.avail-date-nav:focus-visible{outline:3px solid #C93D82;outline-offset:2px}
+.availability-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:19px 28px 25px;flex-wrap:wrap}
+.board-callout{display:flex;align-items:center;gap:13px}.callout-icon{height:41px;width:41px;border-radius:12px;display:grid;place-items:center;background:#E85A9A;color:#fff;font-size:20px;font-weight:900;transform:rotate(-6deg);box-shadow:0 7px 16px #E85A9A40;animation:callout-bob 3.6s ease-in-out infinite}
+.board-callout span:last-child{display:grid;gap:3px}.board-callout b{font-size:12px;color:#46414A}.board-callout small{color:#8A848C;font-size:11px;line-height:1.4}
+.availability-disclaimer{font-size:10px;max-width:330px;line-height:1.55;color:#969099}
+/* Featured dynamic UI polish across the rest of the site */
+.facility-card{transition:transform .34s cubic-bezier(.16,1,.3,1),box-shadow .34s ease,border-color .34s ease!important;transform-origin:center}
+.facility-card:hover{transform:translateY(-9px) rotate(-.35deg);box-shadow:0 20px 46px #E85A9A21;border-color:#E85A9A50}
+.facility-card:hover .mini-court{filter:drop-shadow(0 6px 10px #E85A9A30);transform:scale(1.045) rotate(-1deg)}
+.facility-media{position:relative;overflow:hidden}.facility-media:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 18%,#fff6 48%,transparent 75%);transform:translateX(-120%)}
+.facility-card:hover .facility-media:after{transform:translateX(120%);transition:transform .7s ease}
+.booking-stepper .wizard-step.current{animation:booking-step-pop .38s cubic-bezier(.16,1,.3,1) both;box-shadow:0 6px 22px #E85A9A1f}
+.wizard-success-icon{animation:success-pop .65s cubic-bezier(.15,1.5,.4,1) both}
+.btn{transition:transform .2s ease,box-shadow .2s ease,background .2s ease,color .2s ease}
+.btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 17px #45414B15}
+@keyframes availability-star{0%,100%{transform:rotate(-12deg) scale(.94);opacity:.75}50%{transform:rotate(11deg) scale(1.12);opacity:1}}
+@keyframes availability-pulse{0%,100%{box-shadow:0 0 0 2px #E85A9A30}50%{box-shadow:0 0 0 7px #E85A9A0c}}
+@keyframes occupied-glow{0%,100%{opacity:.7;transform:scale(.92)}50%{opacity:1;transform:scale(1.09)}}
+@keyframes callout-bob{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(-2deg) translateY(-4px)}}
+@keyframes booking-step-pop{from{transform:translateY(8px) scale(.97);opacity:.5}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes success-pop{0%{transform:scale(.65) rotate(-14deg);opacity:0}70%{transform:scale(1.12) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@media(max-width:940px){.availability-heading{padding:26px 22px}.availability-toolbar{padding:17px 22px}.availability-legend{padding:15px 22px}.availability-table-wrap{margin:0 22px}.availability-foot{padding:18px 22px 23px}.availability-calendar-mark{display:none}.availability-date-display{margin-left:0}}
+@media(max-width:590px){.availability-shell{border-radius:18px}.availability-topline{padding:10px 15px;gap:8px;letter-spacing:.09em;font-size:9px}.availability-signal{font-size:8px}.availability-heading{padding:24px 18px}.availability-heading h2{font-size:34px}.availability-heading p{font-size:12px}.availability-toolbar{padding:16px;gap:11px}.availability-picker{flex:1;min-width:130px}.availability-date-control{gap:2px}.availability-date-control .input{min-width:0;width:100%;font-size:12px;padding:8px}.availability-date-control .avail-date-nav{width:27px;flex-shrink:0}.availability-picker .input{width:100%;font-size:12px}.availability-today{width:100%;height:38px}.availability-date-display{width:100%;text-align:left}.availability-legend{padding:13px 16px;gap:12px 16px;font-size:10px}.availability-count{margin-left:0;width:100%}.availability-table-wrap{margin:0 12px;border-radius:12px}.court-schedule thead th:first-child,.court-schedule tbody th{min-width:153px;max-width:153px;padding:11px}.court-row-name{font-size:13px}.court-row-detail{font-size:9px}.court-schedule tbody td{min-width:88px}.schedule-cell{min-width:73px}.availability-foot{padding:16px}.availability-disclaimer{max-width:none}.board-callout small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.availability-spark,.availability-signal i,.court-now.available i,.schedule-cell.occupied .schedule-glyph,.callout-icon,.wizard-success-icon,.booking-stepper .wizard-step.current{animation:none!important}.facility-card:hover,.btn:not(:disabled):hover,.schedule-cell.available:hover{transform:none!important}.availability-table-wrap{scroll-behavior:auto}.schedule-cell,.facility-card,.btn{transition:none!important}}
